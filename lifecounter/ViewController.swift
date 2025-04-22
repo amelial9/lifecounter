@@ -11,10 +11,13 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var player1Label: UILabel!
     @IBOutlet weak var player2Label: UILabel!
-
+    
     @IBOutlet weak var gameEndedLabel: UILabel!
     @IBOutlet weak var restart: UIButton!
     
+    @IBOutlet weak var playerStacks: UIStackView!
+    
+    @IBOutlet weak var mainContent: UIStackView!
     var player1Life = 20
     var player2Life = 20
     var gameOver = false
@@ -24,6 +27,17 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
         gameEndedLabel.isHidden = true
         restart.isHidden = true
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        
+        coordinator.animate(alongsideTransition: { _ in
+            let isLandscape = size.width > size.height
+            
+            self.mainContent.axis = isLandscape ? .vertical : .vertical
+            self.playerStacks.axis = isLandscape ? .horizontal : .vertical
+        })
     }
     
     func updateLifeLabels() {
