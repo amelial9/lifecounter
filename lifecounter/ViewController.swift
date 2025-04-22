@@ -50,7 +50,7 @@ class ViewController: UIViewController {
             gameEndedLabel.text = "⚠️ Player 1 Lost"
             endGame()
         } else if player2Life <= 0 {
-            gameEndedLabel.text = "Player 2 Lost"
+            gameEndedLabel.text = "⚠️ Player 2 Lost"
             endGame()
         }
     }
@@ -117,7 +117,7 @@ class ViewController: UIViewController {
     
     @IBAction func player2Add1(_ sender: Any) {
         guard !gameOver else { return }
-        player2Life = player1Life + 1
+        player2Life = player2Life + 1
         player2Label.text = "Remaining Life: \(player2Life)"
         updateLifeLabels()
         checkGameOver()
