@@ -12,6 +12,10 @@ class ViewController: UIViewController {
     @IBOutlet weak var player1Label: UILabel!
     @IBOutlet weak var player2Label: UILabel!
     
+
+    @IBOutlet weak var player1Input: UITextField!
+    @IBOutlet weak var player2Input: UITextField!
+    
     @IBOutlet weak var gameEndedLabel: UILabel!
     @IBOutlet weak var restart: UIButton!
     
@@ -67,6 +71,8 @@ class ViewController: UIViewController {
         gameOver = false
         gameEndedLabel.isHidden = true
         restart.isHidden = true
+        player1Input.text = ""
+        player2Input.text = ""
         updateLifeLabels()
     }
     
@@ -86,6 +92,24 @@ class ViewController: UIViewController {
         player1Label.text = "Remaining Life: \(player1Life)"
         updateLifeLabels()
         checkGameOver()
+    }
+    
+    @IBAction func player1CustomSubtract(_ sender: Any) {
+        guard !gameOver, let value = Int(player1Input.text ?? "0") else { return }
+        player1Life -= value
+        player1Label.text = "Remaining Life: \(player1Life)"
+        updateLifeLabels()
+        checkGameOver()
+//        logHistory("Player 1 lost \(value) life.")
+    }
+    
+    @IBAction func player1CustomAdd(_ sender: Any) {
+        guard !gameOver, let value = Int(player1Input.text ?? "0") else { return }
+        player1Life += value
+        player1Label.text = "Remaining Life: \(player1Life)"
+        updateLifeLabels()
+        checkGameOver()
+//        logHistory("Player 1 gained \(value) life.")
     }
     
     
@@ -124,21 +148,22 @@ class ViewController: UIViewController {
     }
     
     
-    @IBAction func player2Minus5(_ sender: Any) {
-        guard !gameOver else { return }
-        player2Life = player2Life - 5
+    @IBAction func player2CustomSubtract(_ sender: Any) {
+        guard !gameOver, let value = Int(player2Input.text ?? "0") else { return }
+        player2Life -= value
         player2Label.text = "Remaining Life: \(player2Life)"
         updateLifeLabels()
         checkGameOver()
+//        logHistory("Player 2 lost \(value) life.")
     }
     
-    
-    @IBAction func player2Add5(_ sender: Any) {
-        guard !gameOver else { return }
-        player2Life = player2Life + 5
+    @IBAction func player2CustomAdd(_ sender: Any) {
+        guard !gameOver, let value = Int(player2Input.text ?? "0") else { return }
+        player2Life += value
         player2Label.text = "Remaining Life: \(player2Life)"
         updateLifeLabels()
         checkGameOver()
+//        logHistory("Player 2 gained \(value) life.")
     }
     
     @IBAction func restartTapped(_ sender: Any) {

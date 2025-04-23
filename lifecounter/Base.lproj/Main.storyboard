@@ -62,19 +62,24 @@
                                                         <rect key="frame" x="0.0" y="159.66666666666669" width="353" height="34.333333333333343"/>
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IB8-RN-gc6">
-                                                                <rect key="frame" x="0.0" y="0.0" width="166.66666666666666" height="34.333333333333336"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="31.666666666666668" height="34.333333333333336"/>
                                                                 <state key="normal" title="Button"/>
-                                                                <buttonConfiguration key="configuration" style="gray" title="- 5"/>
+                                                                <buttonConfiguration key="configuration" style="gray" title="-"/>
                                                                 <connections>
-                                                                    <action selector="player1Minus5:" destination="BYZ-38-t0r" eventType="touchUpInside" id="OkQ-E6-WOC"/>
+                                                                    <action selector="player1CustomSubtract:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vHt-3v-Xyt"/>
                                                                 </connections>
                                                             </button>
+                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter amount" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="FST-R2-bcv">
+                                                                <rect key="frame" x="51.666666666666686" y="0.0" width="247" height="34.333333333333336"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                                                            </textField>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uw1-6B-Nqr">
-                                                                <rect key="frame" x="186.66666666666663" y="0.0" width="166.33333333333337" height="34.333333333333336"/>
+                                                                <rect key="frame" x="318.66666666666669" y="0.0" width="34.333333333333314" height="34.333333333333336"/>
                                                                 <state key="normal" title="Button"/>
-                                                                <buttonConfiguration key="configuration" style="gray" title="+ 5"/>
+                                                                <buttonConfiguration key="configuration" style="gray" title="+"/>
                                                                 <connections>
-                                                                    <action selector="player1Add5:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7SN-8u-VKE"/>
+                                                                    <action selector="player1CustomAdd:" destination="BYZ-38-t0r" eventType="touchUpInside" id="iLH-Xx-jHN"/>
                                                                 </connections>
                                                             </button>
                                                         </subviews>
@@ -121,19 +126,24 @@
                                                         <rect key="frame" x="0.0" y="159.66666666666663" width="353" height="34.333333333333343"/>
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Irw-Xr-anw">
-                                                                <rect key="frame" x="0.0" y="0.0" width="166.66666666666666" height="34.333333333333336"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="31.666666666666668" height="34.333333333333336"/>
                                                                 <state key="normal" title="Button"/>
-                                                                <buttonConfiguration key="configuration" style="gray" title="- 5"/>
+                                                                <buttonConfiguration key="configuration" style="gray" title="-"/>
                                                                 <connections>
-                                                                    <action selector="player2Minus5:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ahm-cA-OlW"/>
+                                                                    <action selector="player2CustomSubtract:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Hwg-3Y-wmL"/>
                                                                 </connections>
                                                             </button>
+                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter amount" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="o2D-uA-WQB">
+                                                                <rect key="frame" x="51.666666666666686" y="0.0" width="247" height="34.333333333333336"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
+                                                            </textField>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h2s-vF-Udq">
-                                                                <rect key="frame" x="186.66666666666663" y="0.0" width="166.33333333333337" height="34.333333333333336"/>
+                                                                <rect key="frame" x="318.66666666666669" y="0.0" width="34.333333333333314" height="34.333333333333336"/>
                                                                 <state key="normal" title="Button"/>
-                                                                <buttonConfiguration key="configuration" style="gray" title="+ 5"/>
+                                                                <buttonConfiguration key="configuration" style="gray" title="+"/>
                                                                 <connections>
-                                                                    <action selector="player2Add5:" destination="BYZ-38-t0r" eventType="touchUpInside" id="VrA-AO-GkW"/>
+                                                                    <action selector="player2CustomAdd:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Tob-R4-eZF"/>
                                                                 </connections>
                                                             </button>
                                                         </subviews>
@@ -176,7 +186,9 @@
                     <connections>
                         <outlet property="gameEndedLabel" destination="bit-ZK-HLm" id="ppm-OO-YOC"/>
                         <outlet property="mainContent" destination="vmo-sy-Fio" id="UIl-Bp-I6b"/>
+                        <outlet property="player1Input" destination="FST-R2-bcv" id="C0E-Qm-XHp"/>
                         <outlet property="player1Label" destination="J6e-1y-gbO" id="B48-vS-116"/>
+                        <outlet property="player2Input" destination="o2D-uA-WQB" id="mLR-9v-CBV"/>
                         <outlet property="player2Label" destination="ahL-ia-a1c" id="mqO-gr-sw0"/>
                         <outlet property="playerStacks" destination="OEV-Lk-T39" id="b4F-Zc-6Ei"/>
                         <outlet property="restart" destination="zpx-Du-KuQ" id="A06-xH-Ptc"/>
