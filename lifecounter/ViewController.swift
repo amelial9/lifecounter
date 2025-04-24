@@ -8,166 +8,155 @@
 import UIKit
 
 class ViewController: UIViewController {
-    
-    @IBOutlet weak var player1Label: UILabel!
-    @IBOutlet weak var player2Label: UILabel!
-    
 
-    @IBOutlet weak var player1Input: UITextField!
-    @IBOutlet weak var player2Input: UITextField!
+    @IBOutlet weak var loserLabel: UILabel!
+    @IBOutlet weak var mainContainerStack: UIStackView!
+    @IBOutlet weak var playerContainerStack: UIStackView!
+    @IBOutlet weak var addPlayerButton: UIButton!
+    @IBOutlet weak var resetGameButton: UIButton!
     
-    @IBOutlet weak var gameEndedLabel: UILabel!
-    @IBOutlet weak var restart: UIButton!
-    
-    @IBOutlet weak var playerStacks: UIStackView!
-    
-    @IBOutlet weak var mainContent: UIStackView!
-    var player1Life = 20
-    var player2Life = 20
-    var gameOver = false
-    
+    var players: [UIView] = []
+    var playerLives: [Int] = []
+    var historyLog: [String] = []
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        gameEndedLabel.isHidden = true
-        restart.isHidden = true
+        resetGame(self)
     }
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        
-        coordinator.animate(alongsideTransition: { _ in
-            let isLandscape = size.width > size.height
-            
-            self.mainContent.axis = isLandscape ? .vertical : .vertical
-            self.playerStacks.axis = isLandscape ? .horizontal : .vertical
-        })
+
+    @IBAction func showHistory(_ sender: UIButton) {
+//        let historyVC = HistoryViewController(nibName: "HistoryView", bundle: nil)
+//        historyVC.history = historyLog
+//        present(historyVC, animated: true, completion: nil)
     }
-    
-    func updateLifeLabels() {
-        player1Label.text = "Remaining Life: \(player1Life)"
-        player2Label.text = "Remaining Life: \(player2Life)"
+
+    func addPlayer(name: String) {
+        let playerIndex = players.count
+        playerLives.append(20)
+
+        let nameLabel = UILabel()
+        nameLabel.text = name
+        nameLabel.textAlignment = .center
+
+        let lifeLabel = UILabel()
+        lifeLabel.text = "Remaining Life: 20"
+        lifeLabel.textAlignment = .center
+
+        let inputField = UITextField()
+        inputField.placeholder = "Enter amount"
+        inputField.textAlignment = .center
+        inputField.keyboardType = .numberPad
+        inputField.borderStyle = .roundedRect
+//        inputField.widthAnchor.constraint(equalToConstant: 80).isActive = true
+
+        func updateLifeLabel() {
+            lifeLabel.text = "Remaining Life: \(playerLives[playerIndex])"
+        }
+
+        func checkForLoser() {
+            for (index, life) in playerLives.enumerated() {
+                if life <= 0 {
+                    loserLabel.text = "Player \(index + 1) loses!"
+                    loserLabel.alpha = 1
+                    return
+                }
+            }
+            loserLabel.alpha = 0
+        }
+
+        func grayButton(title: String) -> UIButton {
+            var config = UIButton.Configuration.gray()
+            config.title = title
+            config.cornerStyle = .medium
+            config.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 12, bottom: 6, trailing: 12)
+            return UIButton(configuration: config)
+        }
+
+        let minusOne = grayButton(title: "-1")
+        minusOne.addAction(UIAction { _ in
+            self.playerLives[playerIndex] = max(self.playerLives[playerIndex] - 1, 0)
+            updateLifeLabel()
+            checkForLoser()
+            self.historyLog.append("\(name) lost 1 life.")
+            self.addPlayerButton.isEnabled = false
+        }, for: .touchUpInside)
+
+        let plusOne = grayButton(title: "+1")
+        plusOne.addAction(UIAction { _ in
+            self.playerLives[playerIndex] += 1
+            updateLifeLabel()
+            checkForLoser()
+            self.historyLog.append("\(name) gained 1 life.")
+            self.addPlayerButton.isEnabled = false
+        }, for: .touchUpInside)
+
+        let subtract = grayButton(title: "-")
+        subtract.addAction(UIAction { _ in
+            if let delta = Int(inputField.text ?? "") {
+                let actual = min(delta, self.playerLives[playerIndex])
+                self.playerLives[playerIndex] -= actual
+                updateLifeLabel()
+                checkForLoser()
+                self.historyLog.append("\(name) lost \(actual) life.")
+                self.addPlayerButton.isEnabled = false
+            }
+        }, for: .touchUpInside)
+
+        let add = grayButton(title: "+")
+        add.addAction(UIAction { _ in
+            if let delta = Int(inputField.text ?? "") {
+                self.playerLives[playerIndex] += delta
+                updateLifeLabel()
+                checkForLoser()
+                self.historyLog.append("\(name) gained \(delta) life.")
+                self.addPlayerButton.isEnabled = false
+            }
+        }, for: .touchUpInside)
+
+        let quickAdjustStack = UIStackView(arrangedSubviews: [minusOne, plusOne])
+        quickAdjustStack.axis = .horizontal
+        quickAdjustStack.distribution = .fillEqually
+        quickAdjustStack.spacing = 8
+
+        let customAdjustStack = UIStackView(arrangedSubviews: [subtract, inputField, add])
+        customAdjustStack.axis = .horizontal
+        customAdjustStack.distribution = .fillEqually
+        customAdjustStack.spacing = 8
+
+        let fullStack = UIStackView(arrangedSubviews: [nameLabel, lifeLabel, quickAdjustStack, customAdjustStack])
+        fullStack.axis = .vertical
+        fullStack.spacing = 12
+        fullStack.translatesAutoresizingMaskIntoConstraints = false
+        fullStack.isLayoutMarginsRelativeArrangement = true
+        fullStack.setContentHuggingPriority(.required, for: .vertical)
+        fullStack.setContentCompressionResistancePriority(.required, for: .vertical)
+
+        players.append(fullStack)
+        playerContainerStack.addArrangedSubview(fullStack)
     }
-    
-    func checkGameOver() {
-        if player1Life <= 0 {
-            gameEndedLabel.text = "⚠️ Player 1 Lost"
-            endGame()
-        } else if player2Life <= 0 {
-            gameEndedLabel.text = "⚠️ Player 2 Lost"
-            endGame()
+
+
+    @IBAction func addPlayerButtonTapped(_ sender: UIButton) {
+        guard players.count < 8 else { return }
+        let nextPlayerIndex = players.count + 1
+        addPlayer(name: "Player \(nextPlayerIndex)")
+        if players.count == 8 {
+            sender.isEnabled = false
         }
     }
-    
-    func endGame() {
-        gameOver = true
-        gameEndedLabel.isHidden = false
-        restart.isHidden = false
+
+    @IBAction func resetGame(_ sender: Any) {
+        for player in players {
+            player.removeFromSuperview()
+        }
+        players.removeAll()
+        playerLives.removeAll()
+
+        for i in 1...4 {
+            addPlayer(name: "Player \(i)")
+        }
+
+        loserLabel.alpha = 0
+        addPlayerButton.isEnabled = true
     }
-    
-    func resetGame() {
-        player1Life = 20
-        player2Life = 20
-        gameOver = false
-        gameEndedLabel.isHidden = true
-        restart.isHidden = true
-        player1Input.text = ""
-        player2Input.text = ""
-        updateLifeLabels()
-    }
-    
-    
-    @IBAction func player1Minus1(_ sender: Any) {
-        guard !gameOver else { return }
-        player1Life = player1Life - 1
-        player1Label.text = "Remaining Life: \(player1Life)"
-        updateLifeLabels()
-        checkGameOver()
-    }
-    
-    
-    @IBAction func player1Add1(_ sender: Any) {
-        guard !gameOver else { return }
-        player1Life = player1Life + 1
-        player1Label.text = "Remaining Life: \(player1Life)"
-        updateLifeLabels()
-        checkGameOver()
-    }
-    
-    @IBAction func player1CustomSubtract(_ sender: Any) {
-        guard !gameOver, let value = Int(player1Input.text ?? "0") else { return }
-        player1Life -= value
-        player1Label.text = "Remaining Life: \(player1Life)"
-        updateLifeLabels()
-        checkGameOver()
-//        logHistory("Player 1 lost \(value) life.")
-    }
-    
-    @IBAction func player1CustomAdd(_ sender: Any) {
-        guard !gameOver, let value = Int(player1Input.text ?? "0") else { return }
-        player1Life += value
-        player1Label.text = "Remaining Life: \(player1Life)"
-        updateLifeLabels()
-        checkGameOver()
-//        logHistory("Player 1 gained \(value) life.")
-    }
-    
-    
-    @IBAction func player1Minus5(_ sender: Any) {
-        guard !gameOver else { return }
-        player1Life = player1Life - 5
-        player1Label.text = "Remaining Life: \(player1Life)"
-        updateLifeLabels()
-        checkGameOver()
-    }
-    
-    
-    @IBAction func player1Add5(_ sender: Any) {
-        guard !gameOver else { return }
-        player1Life = player1Life + 5
-        player1Label.text = "Remaining Life: \(player1Life)"
-        updateLifeLabels()
-        checkGameOver()
-    }
-    
-    @IBAction func player2Minus1(_ sender: Any) {
-        guard !gameOver else { return }
-        player2Life = player2Life - 1
-        player2Label.text = "Remaining Life: \(player2Life)"
-        updateLifeLabels()
-        checkGameOver()
-    }
-    
-    
-    @IBAction func player2Add1(_ sender: Any) {
-        guard !gameOver else { return }
-        player2Life = player2Life + 1
-        player2Label.text = "Remaining Life: \(player2Life)"
-        updateLifeLabels()
-        checkGameOver()
-    }
-    
-    
-    @IBAction func player2CustomSubtract(_ sender: Any) {
-        guard !gameOver, let value = Int(player2Input.text ?? "0") else { return }
-        player2Life -= value
-        player2Label.text = "Remaining Life: \(player2Life)"
-        updateLifeLabels()
-        checkGameOver()
-//        logHistory("Player 2 lost \(value) life.")
-    }
-    
-    @IBAction func player2CustomAdd(_ sender: Any) {
-        guard !gameOver, let value = Int(player2Input.text ?? "0") else { return }
-        player2Life += value
-        player2Label.text = "Remaining Life: \(player2Life)"
-        updateLifeLabels()
-        checkGameOver()
-//        logHistory("Player 2 gained \(value) life.")
-    }
-    
-    @IBAction func restartTapped(_ sender: Any) {
-        resetGame()
-    }
-    
 }
