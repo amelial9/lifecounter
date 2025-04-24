@@ -79,7 +79,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="gray" title="History"/>
                                 <connections>
-                                    <action selector="showHistory:" destination="BYZ-38-t0r" eventType="touchUpInside" id="AsQ-dW-Red"/>
+                                    <action selector="historyButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="rqq-kv-Mwk"/>
                                 </connections>
                             </button>
                         </subviews>

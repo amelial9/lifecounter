@@ -9,30 +9,48 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    @IBOutlet weak var loserLabel: UILabel!
     @IBOutlet weak var mainContainerStack: UIStackView!
     @IBOutlet weak var playerContainerStack: UIStackView!
+    
+    @IBOutlet weak var loserLabel: UILabel!
     @IBOutlet weak var addPlayerButton: UIButton!
     @IBOutlet weak var resetGameButton: UIButton!
-    
-    var players: [UIView] = []
-    var playerLives: [Int] = []
-    var historyLog: [String] = []
+
+    var playerViews: [UIView] = []
+    var lifeTotals: [Int] = []
+    var history: [String] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         resetGame(self)
     }
 
-    @IBAction func showHistory(_ sender: UIButton) {
-//        let historyVC = HistoryViewController(nibName: "HistoryView", bundle: nil)
-//        historyVC.history = historyLog
-//        present(historyVC, animated: true, completion: nil)
+    @IBAction func addPlayerButtonTapped(_ sender: UIButton) {
+        guard playerViews.count < 8 else { return }
+        let newIndex = playerViews.count + 1
+        addPlayer(named: "Player \(newIndex)")
+        if playerViews.count == 8 {
+            sender.isEnabled = false
+        }
     }
 
-    func addPlayer(name: String) {
-        let playerIndex = players.count
-        playerLives.append(20)
+    @IBAction func resetGame(_ sender: Any) {
+        playerViews.forEach { $0.removeFromSuperview() }
+        playerViews.removeAll()
+        lifeTotals.removeAll()
+        history.removeAll() // Optional: clear history on reset
+
+        for i in 1...4 {
+            addPlayer(named: "Player \(i)")
+        }
+
+        loserLabel.alpha = 0
+        addPlayerButton.isEnabled = true
+    }
+
+    func addPlayer(named name: String) {
+        let index = playerViews.count
+        lifeTotals.append(20)
 
         let nameLabel = UILabel()
         nameLabel.text = name
@@ -42,121 +60,100 @@ class ViewController: UIViewController {
         lifeLabel.text = "Remaining Life: 20"
         lifeLabel.textAlignment = .center
 
-        let inputField = UITextField()
-        inputField.placeholder = "Enter amount"
-        inputField.textAlignment = .center
-        inputField.keyboardType = .numberPad
-        inputField.borderStyle = .roundedRect
-//        inputField.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        let input = UITextField()
+        input.placeholder = "Enter amount"
+        input.textAlignment = .center
+        input.keyboardType = .numberPad
+        input.borderStyle = .roundedRect
 
-        func updateLifeLabel() {
-            lifeLabel.text = "Remaining Life: \(playerLives[playerIndex])"
+        func updateLife() {
+            lifeLabel.text = "Remaining Life: \(lifeTotals[index])"
         }
 
-        func checkForLoser() {
-            for (index, life) in playerLives.enumerated() {
-                if life <= 0 {
-                    loserLabel.text = "Player \(index + 1) loses!"
-                    loserLabel.alpha = 1
-                    return
-                }
+        func checkIfLoser() {
+            for (i, life) in lifeTotals.enumerated() where life <= 0 {
+                loserLabel.text = "Player \(i + 1) loses!"
+                loserLabel.alpha = 1
+                return
             }
             loserLabel.alpha = 0
         }
 
-        func grayButton(title: String) -> UIButton {
+        func makeButton(_ title: String, action: @escaping () -> Void) -> UIButton {
             var config = UIButton.Configuration.gray()
             config.title = title
             config.cornerStyle = .medium
             config.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 12, bottom: 6, trailing: 12)
-            return UIButton(configuration: config)
+            let button = UIButton(configuration: config)
+            button.addAction(UIAction { _ in action() }, for: .touchUpInside)
+            return button
         }
 
-        let minusOne = grayButton(title: "-1")
-        minusOne.addAction(UIAction { _ in
-            self.playerLives[playerIndex] = max(self.playerLives[playerIndex] - 1, 0)
-            updateLifeLabel()
-            checkForLoser()
-            self.historyLog.append("\(name) lost 1 life.")
-            self.addPlayerButton.isEnabled = false
-        }, for: .touchUpInside)
+        let minusOne = makeButton("-1") {
+            self.lifeTotals[index] = max(self.lifeTotals[index] - 1, 0)
+            updateLife()
+            checkIfLoser()
+            self.history.append("\(name) added 1 life.")
+        }
 
-        let plusOne = grayButton(title: "+1")
-        plusOne.addAction(UIAction { _ in
-            self.playerLives[playerIndex] += 1
-            updateLifeLabel()
-            checkForLoser()
-            self.historyLog.append("\(name) gained 1 life.")
-            self.addPlayerButton.isEnabled = false
-        }, for: .touchUpInside)
+        let plusOne = makeButton("+1") {
+            self.lifeTotals[index] += 1
+            updateLife()
+            checkIfLoser()
+            self.history.append("\(name) added 1 life.")
+        }
 
-        let subtract = grayButton(title: "-")
-        subtract.addAction(UIAction { _ in
-            if let delta = Int(inputField.text ?? "") {
-                let actual = min(delta, self.playerLives[playerIndex])
-                self.playerLives[playerIndex] -= actual
-                updateLifeLabel()
-                checkForLoser()
-                self.historyLog.append("\(name) lost \(actual) life.")
-                self.addPlayerButton.isEnabled = false
+        let subtract = makeButton("-") {
+            if let amount = Int(input.text ?? "") {
+                let change = min(amount, self.lifeTotals[index])
+                self.lifeTotals[index] -= change
+                updateLife()
+                checkIfLoser()
+                self.history.append("\(name) lost \(change) life.")
             }
-        }, for: .touchUpInside)
+        }
 
-        let add = grayButton(title: "+")
-        add.addAction(UIAction { _ in
-            if let delta = Int(inputField.text ?? "") {
-                self.playerLives[playerIndex] += delta
-                updateLifeLabel()
-                checkForLoser()
-                self.historyLog.append("\(name) gained \(delta) life.")
-                self.addPlayerButton.isEnabled = false
+        let add = makeButton("+") {
+            if let amount = Int(input.text ?? "") {
+                self.lifeTotals[index] += amount
+                updateLife()
+                checkIfLoser()
+                self.history.append("\(name) added \(amount) life.")
             }
-        }, for: .touchUpInside)
+        }
 
-        let quickAdjustStack = UIStackView(arrangedSubviews: [minusOne, plusOne])
-        quickAdjustStack.axis = .horizontal
-        quickAdjustStack.distribution = .fillEqually
-        quickAdjustStack.spacing = 8
+        let quickAdjust = UIStackView(arrangedSubviews: [minusOne, plusOne])
+        quickAdjust.axis = .horizontal
+        quickAdjust.spacing = 8
+        quickAdjust.distribution = .fillEqually
 
-        let customAdjustStack = UIStackView(arrangedSubviews: [subtract, inputField, add])
-        customAdjustStack.axis = .horizontal
-        customAdjustStack.distribution = .fillEqually
-        customAdjustStack.spacing = 8
+        let customAdjust = UIStackView(arrangedSubviews: [subtract, input, add])
+        customAdjust.axis = .horizontal
+        customAdjust.spacing = 8
+        customAdjust.distribution = .fillEqually
 
-        let fullStack = UIStackView(arrangedSubviews: [nameLabel, lifeLabel, quickAdjustStack, customAdjustStack])
-        fullStack.axis = .vertical
-        fullStack.spacing = 12
-        fullStack.translatesAutoresizingMaskIntoConstraints = false
-        fullStack.isLayoutMarginsRelativeArrangement = true
-        fullStack.setContentHuggingPriority(.required, for: .vertical)
-        fullStack.setContentCompressionResistancePriority(.required, for: .vertical)
+        let playerStack = UIStackView(arrangedSubviews: [nameLabel, lifeLabel, quickAdjust, customAdjust])
+        playerStack.axis = .vertical
+        playerStack.spacing = 12
+        playerStack.translatesAutoresizingMaskIntoConstraints = false
+        playerStack.isLayoutMarginsRelativeArrangement = true
+        playerStack.setContentHuggingPriority(.required, for: .vertical)
+        playerStack.setContentCompressionResistancePriority(.required, for: .vertical)
 
-        players.append(fullStack)
-        playerContainerStack.addArrangedSubview(fullStack)
+        playerViews.append(playerStack)
+        playerContainerStack.addArrangedSubview(playerStack)
     }
 
-
-    @IBAction func addPlayerButtonTapped(_ sender: UIButton) {
-        guard players.count < 8 else { return }
-        let nextPlayerIndex = players.count + 1
-        addPlayer(name: "Player \(nextPlayerIndex)")
-        if players.count == 8 {
-            sender.isEnabled = false
-        }
+    @IBAction func historyButtonTapped(_ sender: UIButton) {
+        let historyVC = HistoryViewController(nibName: "HistoryView", bundle: nil)
+        historyVC.history = self.history
+        present(historyVC, animated: true, completion: nil)
     }
 
-    @IBAction func resetGame(_ sender: Any) {
-        for player in players {
-            player.removeFromSuperview()
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showHistory",
+           let historyVC = segue.destination as? HistoryViewController {
+            historyVC.history = self.history
         }
-        players.removeAll()
-        playerLives.removeAll()
-
-        for i in 1...4 {
-            addPlayer(name: "Player \(i)")
-        }
-
-        loserLabel.alpha = 0
-        addPlayerButton.isEnabled = true
     }
 }

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HistoryViewController" customModule="lifecounter">
+            <connections>
+                <outlet property="textView" destination="PMZ-Gd-FkG" id="n1m-pR-Gi0"/>
+                <outlet property="view" destination="iN0-l3-epB" id="IxI-YX-7Se"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="PMZ-Gd-FkG">
+                    <rect key="frame" x="76" y="138" width="240" height="531"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <color key="textColor" systemColor="labelColor"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                </textView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6xm-BL-8qV">
+                    <rect key="frame" x="163" y="729" width="67" height="35"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="67" id="bc5-dS-omg"/>
+                        <constraint firstAttribute="height" constant="35" id="hsh-DD-xkf"/>
+                    </constraints>
+                    <state key="normal" title="Button"/>
+                    <buttonConfiguration key="configuration" style="gray" title="Close"/>
+                    <connections>
+                        <action selector="closeTapped:" destination="-1" eventType="touchUpInside" id="x9s-i9-iPS"/>
+                    </connections>
+                </button>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="6xm-BL-8qV" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="4Pf-So-2ae"/>
+                <constraint firstItem="PMZ-Gd-FkG" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="76" id="JDb-58-Fal"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="PMZ-Gd-FkG" secondAttribute="trailing" constant="77" id="cL4-Jd-Fff"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="6xm-BL-8qV" secondAttribute="bottom" constant="20" id="dfT-fZ-tGe"/>
+                <constraint firstItem="PMZ-Gd-FkG" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="20" id="fDd-1O-rVs"/>
+                <constraint firstItem="6xm-BL-8qV" firstAttribute="top" secondItem="PMZ-Gd-FkG" secondAttribute="bottom" constant="60" id="sFP-hD-N4E"/>
+            </constraints>
+            <point key="canvasLocation" x="70.992366412213741" y="20.422535211267608"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
