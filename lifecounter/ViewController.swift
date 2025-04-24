@@ -23,6 +23,14 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         resetGame(self)
+        
+        playerContainerStack.setContentHuggingPriority(.required, for: .vertical)
+        playerContainerStack.setContentCompressionResistancePriority(.required, for: .vertical)
+        
+        DispatchQueue.main.async {
+            self.playerContainerStack.layoutIfNeeded()
+        }
+
     }
 
     @IBAction func addPlayerButtonTapped(_ sender: UIButton) {
