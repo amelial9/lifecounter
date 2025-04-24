@@ -17,10 +17,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="7kN-YV-lwL" userLabel="mainContainerStack">
-                                <rect key="frame" x="30" y="154" width="380" height="644"/>
+                                <rect key="frame" x="30" y="154" width="380" height="614"/>
                                 <subviews>
                                     <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yMQ-I2-Ub1">
-                                        <rect key="frame" x="0.0" y="0.0" width="380" height="644"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="380" height="614"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" distribution="fillEqually" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="osF-Jv-pfb" userLabel="playerContainerStack">
                                                 <rect key="frame" x="0.0" y="0.0" width="380" height="592"/>
@@ -91,7 +91,7 @@
                             <constraint firstItem="d8l-SX-bio" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="3at-j0-SKc"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="7kN-YV-lwL" secondAttribute="trailing" constant="30" id="Dq9-Xl-xL4"/>
                             <constraint firstItem="7kN-YV-lwL" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="30" id="Tdo-oH-IuI"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="7kN-YV-lwL" secondAttribute="bottom" constant="90" id="UvT-pD-hE4"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="7kN-YV-lwL" secondAttribute="bottom" constant="120" id="UvT-pD-hE4"/>
                             <constraint firstItem="raN-Jy-Rh3" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="60" id="ff4-Or-fKU"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="d8l-SX-bio" secondAttribute="bottom" constant="30" id="h5F-6N-OOL"/>
                         </constraints>
